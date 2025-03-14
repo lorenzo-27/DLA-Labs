@@ -1,3 +1,7 @@
 /.idea/*
 *.ipynb
+/tmp/*
+/L1-CNNs/checkpoints/*
 /L1-CNNs/data/*
+/L1-CNNs/runs/*
+*pyc
