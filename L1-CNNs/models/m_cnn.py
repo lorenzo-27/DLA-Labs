@@ -4,7 +4,7 @@ from torch import nn
 
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, activation=True):
-        """Blocco convoluzionale di base."""
+        """Convolutional block with optional activation function."""
         super().__init__()
         self.layers = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size, padding=kernel_size // 2),
@@ -18,7 +18,7 @@ class ConvBlock(nn.Module):
 
 class ResidualConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size):
-        """Blocco convoluzionale residuale con connessione skip."""
+        """Residual convolutional block with skip connection."""
         super().__init__()
         self.same_dim = (in_channels == out_channels)
         self.block = nn.Sequential(
@@ -40,29 +40,29 @@ class ResidualConvBlock(nn.Module):
 class CNN(nn.Module):
     def __init__(self, in_channels, num_classes, filters, kernel_size, input_shape):
         """
-        Modello CNN senza connessioni residuali.
+        CNN model without residual connections.
 
         Args:
-            in_channels: Numero di canali dell'input
-            num_classes: Numero di classi per l'output
-            filters: Lista di numeri di filtri per ciascun layer
-            kernel_size: Dimensione del kernel per le convoluzioni
-            input_shape: Dimensione dell'input (es. (3, 32, 32) per CIFAR-10)
+            in_channels: number of input channels
+            num_classes: number of output classes
+            filters: list of filter numbers for each layer
+            kernel_size: kernel size for convolutions
+            input_shape: input shape (e.g. (1, 28, 28) for MNIST - (3, 32, 32) for CIFAR-10)
         """
         super().__init__()
         self.input_shape = input_shape
 
-        # Layers convoluzionali
+        # Convolutional layers
         self.conv_layers = nn.ModuleList()
         for i in range(len(filters)):
             in_c = in_channels if i == 0 else filters[i - 1]
             out_c = filters[i]
             self.conv_layers.append(ConvBlock(in_c, out_c, kernel_size))
-            # Aggiunge un layer di MaxPooling ogni 2 layers
+            # Adds a MaxPooling layer every 2 convolutional layers
             if i % 2 == 1:
                 self.conv_layers.append(nn.MaxPool2d(2))
 
-        # Calcolo della dimensione dell'output dopo le convoluzioni
+        # Calculate the output size after convolutions
         with torch.no_grad():
             x = torch.zeros(1, *input_shape)
             for layer in self.conv_layers:
@@ -87,22 +87,22 @@ class CNN(nn.Module):
 class ResidualCNN(nn.Module):
     def __init__(self, in_channels, num_classes, filters, kernel_size, input_shape):
         """
-        Modello CNN con connessioni residuali.
+        CNN model with residual connections.
 
         Args:
-            in_channels: Numero di canali dell'input
-            num_classes: Numero di classi per l'output
-            filters: Lista di numeri di filtri per ciascun layer
-            kernel_size: Dimensione del kernel per le convoluzioni
-            input_shape: Dimensione dell'input (es. (3, 32, 32) per CIFAR-10)
+            in_channels: number of input channels
+            num_classes: number of output classes
+            filters: list of filter numbers for each layer
+            kernel_size: kernel size for convolutions
+            input_shape: input shape (e.g. (1, 28, 28) for MNIST - (3, 32, 32) for CIFAR-10)
         """
         super().__init__()
         self.input_shape = input_shape
 
-        # Primo layer convoluzionale senza connessione residuale
+        # First convolutional layer without residual connection
         self.first_conv = ConvBlock(in_channels, filters[0], kernel_size)
 
-        # Layers residuali
+        # Residual layers
         self.res_layers = nn.ModuleList()
         self.pool_layers = nn.ModuleList()
 
@@ -110,11 +110,11 @@ class ResidualCNN(nn.Module):
             in_c = filters[i]
             out_c = filters[i + 1]
             self.res_layers.append(ResidualConvBlock(in_c, out_c, kernel_size))
-            # Aggiunge un layer di MaxPooling ogni 2 blocchi residuali
+            # Adds a MaxPooling layer every 2 residual layers
             if i % 2 == 1:
                 self.pool_layers.append(nn.MaxPool2d(2))
 
-        # Calcolo della dimensione dell'output dopo le convoluzioni
+        # Calculate the output size after convolutions
         with torch.no_grad():
             x = torch.zeros(1, *input_shape)
             x = self.first_conv(x)
@@ -147,7 +147,7 @@ class ResidualCNN(nn.Module):
 
 
 def load_model(config):
-    """Carica il modello CNN basato sui parametri forniti."""
+    """Load the CNN model based on the configuration."""
     model_params = config["model"]
     input_shape = tuple(model_params["input_shape"])
 
@@ -172,7 +172,7 @@ def load_model(config):
 
 
 def main():
-    """Funzione di test per verificare l'architettura del modello."""
+    """Test the CNN model."""
     from rich.console import Console
     from torchinfo import summary
     import yaml

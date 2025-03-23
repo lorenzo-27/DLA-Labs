@@ -4,7 +4,7 @@ from torch import nn
 
 class MLPBlock(nn.Module):
     def __init__(self, in_features, out_features, activation=True):
-        """Blocco MLP base con opzione di attivazione."""
+        """MLP block with optional activation function."""
         super().__init__()
         self.layers = nn.Sequential(
             nn.Linear(in_features, out_features),
@@ -18,13 +18,14 @@ class MLPBlock(nn.Module):
 
 class ResidualMLPBlock(nn.Module):
     def __init__(self, in_features, out_features):
-        """Blocco MLP residuale con connessione skip."""
+        """MLP residual block with skip connection."""
         super().__init__()
         self.same_dim = (in_features == out_features)
         self.block = nn.Sequential(
             MLPBlock(in_features, out_features, activation=True),
             MLPBlock(out_features, out_features, activation=False)
         )
+        # if dimensions are different, apply a linear projection to map the residual to the target dimension
         if not self.same_dim:
             self.projection = nn.Linear(in_features, out_features)
         self.activation = nn.ReLU()
@@ -34,17 +35,18 @@ class ResidualMLPBlock(nn.Module):
         out = self.block(x)
         if not self.same_dim:
             residual = self.projection(residual)
+        # add the residual to the output and apply the activation function
         return self.activation(out + residual)
 
 
 class MLP(nn.Module):
     def __init__(self, layer_sizes, input_shape):
         """
-        Modello MLP senza connessioni residuali.
+        MLP model without residual connections.
 
         Args:
-            layer_sizes: Lista di numeri interi che rappresentano le dimensioni di ogni layer
-            input_shape: Dimensione dell'input (es. (1, 28, 28) per MNIST)
+            layer_sizes: list of integers representing the size of each layer
+            input_shape: input shape (e.g. (1, 28, 28) for MNIST - (3, 32, 32) for CIFAR-10)
         """
         super().__init__()
         self.input_shape = input_shape
@@ -70,11 +72,11 @@ class MLP(nn.Module):
 class ResidualMLP(nn.Module):
     def __init__(self, layer_sizes, input_shape):
         """
-        Modello MLP con connessioni residuali.
+        MLP model with residual connections.
 
         Args:
-            layer_sizes: Lista di numeri interi che rappresentano le dimensioni di ogni layer
-            input_shape: Dimensione dell'input (es. (1, 28, 28) per MNIST)
+            layer_sizes: list of integers representing the size of each layer
+            input_shape: input shape (e.g. (1, 28, 28) for MNIST - (3, 32, 32) for CIFAR-10)
         """
         super().__init__()
         self.input_shape = input_shape
@@ -110,7 +112,7 @@ class ResidualMLP(nn.Module):
 
 
 def load_model(config):
-    """Carica il modello MLP basato sui parametri forniti."""
+    """Load the MLP model based on the provided parameters."""
     model_params = config["model"]
     input_shape = model_params["input_shape"]
 
@@ -129,7 +131,7 @@ def load_model(config):
 
 
 def main():
-    """Funzione di test per verificare l'architettura del modello."""
+    """Test the MLP model."""
     from rich.console import Console
     from torchinfo import summary
     import yaml

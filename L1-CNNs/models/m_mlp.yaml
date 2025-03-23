@@ -1,8 +1,8 @@
 model:
   name: mlp
   input_shape: [1, 28, 28]  # [channels, height, width] - [1, 28, 28] for MNIST, [3, 32, 32] for CIFAR-10
-  layer_sizes: [128, 64, 32, 10]  # La dimensione finale deve essere il numero di classi
-  residual: false  # Se utilizzare connessioni residuali
+  layer_sizes: [128, 64, 32, 10]  # Layer sizes - [128, 64, 32, 10] for MNIST, [512, 256, 128, 10] for CIFAR-10
+  residual: false
 
 training:
   learning_rate: 0.001
@@ -19,4 +19,4 @@ training:
 dataset:
   name: mnist  # [mnist, cifar10]
   data_dir: data/
-  val_size: 5000  # Dimensione del set di validazione
+  val_size: 5000  # Validation set size

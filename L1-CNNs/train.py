@@ -21,7 +21,7 @@ from dataset import load_data
 
 
 def get_logger():
-    """Configura e restituisce un logger."""
+    """Set up and returns the logger."""
     FORMAT = "%(message)s"
     logging.basicConfig(
         level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
@@ -35,7 +35,7 @@ console = Console()
 
 
 def save_checkpoint(model, optimizer, epoch, loss, acc, config):
-    """Salva un checkpoint del modello."""
+    """Save a model checkpoint."""
     checkpoint_dir = config["training"]["checkpoint_dir"]
     Path(checkpoint_dir).mkdir(parents=True, exist_ok=True)
 
@@ -61,10 +61,11 @@ def save_checkpoint(model, optimizer, epoch, loss, acc, config):
 
 def train_epoch(model, dataloader, criterion, optimizer, device) -> Tuple[float, float]:
     """
-    Addestra il modello per un'epoca.
+    Trains the model for one epoch.
 
     Returns:
-        loss_avg: Loss media per batch
+        loss_avg: average loss per batch
+        accuracy: accuracy in percentage
     """
     model.train()
     running_loss = 0.0
@@ -83,7 +84,7 @@ def train_epoch(model, dataloader, criterion, optimizer, device) -> Tuple[float,
         loss.backward()
         optimizer.step()
 
-        # Statistiche
+        # Statistics
         running_loss += loss.item()
         _, predicted = outputs.max(1)
         total += targets.size(0)
@@ -97,11 +98,11 @@ def train_epoch(model, dataloader, criterion, optimizer, device) -> Tuple[float,
 
 def evaluate(model, dataloader, criterion, device) -> Tuple[float, float]:
     """
-    Valuta il modello su un dataset.
+    Evaluate the model on the given dataset.
 
     Returns:
-        loss_avg: Loss media per batch
-        accuracy: Accuratezza in percentuale
+        loss_avg: average loss per batch
+        accuracy: accuracy in percentage
     """
     model.eval()
     running_loss = 0.0
@@ -128,16 +129,16 @@ def evaluate(model, dataloader, criterion, device) -> Tuple[float, float]:
 
 def train_model(model, config, train_loader, val_loader, test_loader):
     """
-    Addestra e valuta un modello.
+    Train the model and evaluate it on the test set.
 
     Args:
-        model: Modello da addestrare
-        config: Configurazione dell'addestramento
-        train_loader: DataLoader per i dati di training
-        val_loader: DataLoader per i dati di validazione
-        test_loader: DataLoader per i dati di test
+        model: model to train
+        config: training configuration
+        train_loader: data loader for training data
+        val_loader: data loader for validation data
+        test_loader: data loader for test data
     """
-    # Ottieni i parametri di training
+    # Get training parameters
     num_epochs = config["training"]["num_epochs"]
     lr = config["training"]["learning_rate"]
     weight_decay = config["training"]["weight_decay"]
@@ -146,13 +147,13 @@ def train_model(model, config, train_loader, val_loader, test_loader):
     optimizer_name = config["training"].get("optimizer", "adam")
     scheduler_name = config["training"].get("scheduler", "reduce_lr")
 
-    # Modello su device
+    # Move model to device
     model = model.to(device)
 
-    # Criterio di loss
+    # Loss criterion
     criterion = nn.CrossEntropyLoss()
 
-    # Ottimizzatore
+    # Optimizer
     if optimizer_name.lower() == "adam":
         optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     elif optimizer_name.lower() == "sgd":
@@ -208,7 +209,7 @@ def train_model(model, config, train_loader, val_loader, test_loader):
         else:  # cosine annealing
             scheduler.step()
 
-        # Salvare checkpoint
+        # Save checkpoint
         if epoch % config["training"]["save_every"] == 0:
             save_checkpoint(model, optimizer, epoch, val_loss, val_acc, config)
 
@@ -226,17 +227,17 @@ def train_model(model, config, train_loader, val_loader, test_loader):
             LOG.info(f"Early stopping dopo {epoch} epoche")
             break
 
-        # Ripristina il miglior modello
+        # Reset model to previous best state
     model.load_state_dict(best_model_state)
 
-    # Valutazione sul test set
+    # Test set evaluation
     test_loss, test_acc = evaluate(model, test_loader, criterion, device)
     LOG.info(f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc}")
 
-    # Salva il modello finale
+    # Save final model
     save_checkpoint(model, optimizer, num_epochs, test_loss, test_acc, config)
 
-    # Chiudi TensorBoard writer
+    # Close TensorBoard writer
     writer.close()
 
     return {
@@ -247,29 +248,29 @@ def train_model(model, config, train_loader, val_loader, test_loader):
 
 
 def main():
-    """Funzione principale per l'addestramento del modello."""
+    """Main function to train a neural network model."""
     parser = argparse.ArgumentParser(description="Addestramento di modelli di reti neurali")
     parser.add_argument("--config", type=str, required=True, help="Path al file di configurazione YAML")
     args = parser.parse_args()
 
-    # Carica la configurazione
+    # Load configuration
     with open(args.config, "r") as f:
         config = yaml.safe_load(f)
 
     console.print(f"[bold green]Configurazione caricata:[/bold green]")
     console.print(config)
 
-    # Imposta seed per riproducibilità
+    # Set seed for reproducibility
     torch.manual_seed(42)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
     np.random.seed(42)
 
-    # Carica i dati
+    # Load data
     train_loader, val_loader, test_loader = load_data(config)
     LOG.info(f"Dataset {config['dataset']['name']} caricato")
 
-    # Carica il modello
+    # Load model
     model_name = config["model"]["name"]
     if model_name.lower() == "mlp":
         model_module = m_mlp
@@ -281,7 +282,7 @@ def main():
     model = model_module.load_model(config)
     LOG.info(f"Modello {model_name} caricato")
 
-    # Addestramento
+    # Train model
     results = train_model(model, config, train_loader, val_loader, test_loader)
 
     LOG.info(f"Addestramento completato!")

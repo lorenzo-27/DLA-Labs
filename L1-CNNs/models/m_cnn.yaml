@@ -2,9 +2,9 @@ model:
   name: cnn
   input_shape: [1, 28, 28]  # [channels, height, width] - [1, 28, 28] for MNIST, [3, 32, 32] for CIFAR-10
   num_classes: 10
-  filters: [16, 32, 64, 128]  # Numero di filtri per ciascun layer - [32, 64, 128, 256] per CIFAR-10 - per MNIST [16, 32, 64, 128]
+  filters: [16, 32, 64, 128]  # Filters for each layer - [16, 32, 64, 128] for MNIST, [32, 64, 128, 256] for CIFAR-10
   kernel_size: 3
-  residual: false  # Se utilizzare connessioni residuali
+  residual: false
 
 training:
   learning_rate: 0.001
@@ -21,4 +21,4 @@ training:
 dataset:
   name: mnist  # [mnist, cifar10]
   data_dir: data/
-  val_size: 5000  # Dimensione del set di validazione
+  val_size: 5000  # Validation set size

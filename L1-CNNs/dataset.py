@@ -6,27 +6,27 @@ from torchvision import datasets, transforms
 
 def load_mnist(batch_size, val_size=5000, data_dir='./data'):
     """
-    Carica il dataset MNIST e lo divide in train, validation e test.
+    Load the MNIST dataset and split it into train, validation, and test.
 
     Args:
-        batch_size: Dimensione del batch
-        val_size: Numero di esempi per la validazione
-        data_dir: Directory dove salvare i dati
+        batch_size: batch size
+        val_size: number of examples for validation
+        data_dir: directory to save the data
 
     Returns:
-        train_loader, val_loader, test_loader: DataLoader per i dataset
+        train_loader, val_loader, test_loader: data loaders for the datasets
     """
-    # Trasformazioni per MNIST
+    # MNIST transformations
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
     ])
 
-    # Caricamento dei dataset
+    # Dataset loading
     ds_train = datasets.MNIST(root=data_dir, train=True, download=True, transform=transform)
     ds_test = datasets.MNIST(root=data_dir, train=False, download=True, transform=transform)
 
-    # Split train in train e validation
+    # Train-validation split
     indices = np.random.permutation(len(ds_train))
     train_indices = indices[val_size:]
     val_indices = indices[:val_size]
@@ -34,7 +34,7 @@ def load_mnist(batch_size, val_size=5000, data_dir='./data'):
     ds_val = Subset(ds_train, val_indices)
     ds_train = Subset(ds_train, train_indices)
 
-    # Creazione dei DataLoader
+    # DataLoader creation
     train_loader = DataLoader(ds_train, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
     val_loader = DataLoader(ds_val, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
     test_loader = DataLoader(ds_test, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
@@ -44,17 +44,17 @@ def load_mnist(batch_size, val_size=5000, data_dir='./data'):
 
 def load_cifar10(batch_size, val_size=5000, data_dir='./data'):
     """
-    Carica il dataset CIFAR-10 e lo divide in train, validation e test.
+    Load the CIFAR-10 dataset and split it into train, validation, and test.
 
     Args:
-        batch_size: Dimensione del batch
-        val_size: Numero di esempi per la validazione
-        data_dir: Directory dove salvare i dati
+        batch_size: batch size
+        val_size: number of examples for validation
+        data_dir: directory to save the data
 
     Returns:
-        train_loader, val_loader, test_loader: DataLoader per i dataset
+        train_loader, val_loader, test_loader: data loaders for the datasets
     """
-    # Trasformazioni per CIFAR-10
+    # CIFAR-10 transformations
     transform_train = transforms.Compose([
         transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
@@ -67,11 +67,11 @@ def load_cifar10(batch_size, val_size=5000, data_dir='./data'):
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
     ])
 
-    # Caricamento dei dataset
+    # Dataset loading
     ds_train = datasets.CIFAR10(root=data_dir, train=True, download=True, transform=transform_train)
     ds_test = datasets.CIFAR10(root=data_dir, train=False, download=True, transform=transform_test)
 
-    # Split train in train e validation
+    # Train-validation split
     indices = np.random.permutation(len(ds_train))
     train_indices = indices[val_size:]
     val_indices = indices[:val_size]
@@ -79,10 +79,10 @@ def load_cifar10(batch_size, val_size=5000, data_dir='./data'):
     ds_val = Subset(ds_train, val_indices)
     ds_train = Subset(ds_train, train_indices)
 
-    # Per la validazione, usiamo la trasformazione di test (senza data augmentation)
+    # Test set transformation for evaluation purposes (no data augmentation)
     ds_val.dataset.transform = transform_test
 
-    # Creazione dei DataLoader
+    # DataLoader creation
     train_loader = DataLoader(ds_train, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True)
     val_loader = DataLoader(ds_val, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
     test_loader = DataLoader(ds_test, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
@@ -92,13 +92,13 @@ def load_cifar10(batch_size, val_size=5000, data_dir='./data'):
 
 def load_data(config):
     """
-    Carica il dataset specificato nella configurazione.
+    Load the dataset based on the provided configuration.
 
     Args:
-        config: Dizionario di configurazione
+        config: configuration dictionary
 
     Returns:
-        train_loader, val_loader, test_loader: DataLoader per i dataset
+        train_loader, val_loader, test_loader: data loaders for the datasets
     """
     dataset_name = config["dataset"]["name"]
     batch_size = config["training"]["batch_size"]
@@ -114,13 +114,13 @@ def load_data(config):
 
 
 def main():
-    """Test del modulo di caricamento dei dataset."""
+    """Test the data loading functions."""
     from rich.console import Console
     import yaml
 
     console = Console()
 
-    # Test con MNIST
+    # MNIST test
     console.print("\n[bold]Test MNIST:[/bold]")
     mnist_config = {
         "dataset": {"name": "mnist", "val_size": 5000, "data_dir": "./data"},
@@ -133,13 +133,13 @@ def main():
     console.print(f"Batches in val_loader: {len(val_loader)}")
     console.print(f"Batches in test_loader: {len(test_loader)}")
 
-    # Verifica la forma dei dati
+    # Check the data shape
     for images, labels in train_loader:
         console.print(f"MNIST image batch shape: {images.shape}")
         console.print(f"MNIST labels batch shape: {labels.shape}")
         break
 
-    # Test con CIFAR-10
+    # CIFAR-10 test
     console.print("\n[bold]Test CIFAR-10:[/bold]")
     cifar_config = {
         "dataset": {"name": "cifar10", "val_size": 5000, "data_dir": "./data"},
@@ -152,7 +152,7 @@ def main():
     console.print(f"Batches in val_loader: {len(val_loader)}")
     console.print(f"Batches in test_loader: {len(test_loader)}")
 
-    # Verifica la forma dei dati
+    # Check the data shape
     for images, labels in train_loader:
         console.print(f"CIFAR-10 image batch shape: {images.shape}")
         console.print(f"CIFAR-10 labels batch shape: {labels.shape}")
