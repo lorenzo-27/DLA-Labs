@@ -208,7 +208,7 @@ def train_resnet_cam(config):
         trained model
     """
 
-    from ..train import train_model, get_logger
+    from DLA_Labs.L1_CNNs.train import train_model, get_logger
     from data import load_imagenette
 
     # Set up logger

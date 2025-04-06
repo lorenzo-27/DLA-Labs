@@ -6,7 +6,7 @@ def parse_requirements(file_path):
         return [line.strip() for line in file if line and not line.startswith("#")]
 
 setup(
-    name="DLA-Labs",
+    name="DLA_Labs",
     version="1.0.0",
     author="Lorenzo Benedetti",
     description="DLA labs repository",
