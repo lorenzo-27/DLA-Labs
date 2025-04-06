@@ -2,10 +2,10 @@ from rich.console import Console
 import argparse
 import os
 
-from model import ResNetCAM, train_resnet_cam
-from visualization import visualize_cam, visualize_random_imagenette_samples, visualize_imagenette_by_index
-from utils import load_config, save_config, DEFAULT_CONFIG
-from data import get_imagenette_class_mapping
+from DLA_Labs.L1_CNNs.CAM.model import ResNetCAM, train_resnet_cam
+from DLA_Labs.L1_CNNs.CAM.visualization import visualize_cam, visualize_random_imagenette_samples, visualize_imagenette_by_index
+from DLA_Labs.L1_CNNs.CAM.utils import load_config, save_config, DEFAULT_CONFIG
+from DLA_Labs.L1_CNNs.CAM.data import get_imagenette_class_mapping
 
 
 def parse_args():

@@ -14,9 +14,9 @@ from torch import nn
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
-import models.m_mlp as m_mlp
-import models.m_cnn as m_cnn
-from dataset import load_data
+import DLA_Labs.L1_CNNs.models.m_mlp as m_mlp
+import DLA_Labs.L1_CNNs.models.m_cnn as m_cnn
+from DLA_Labs.L1_CNNs.dataset import load_data
 
 
 def get_logger():

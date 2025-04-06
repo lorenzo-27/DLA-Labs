@@ -5,7 +5,7 @@ import cv2
 import random
 from pathlib import Path
 
-from data import load_imagenette, get_imagenette_class_mapping
+from DLA_Labs.L1_CNNs.CAM.data import load_imagenette, get_imagenette_class_mapping
 
 
 def prepare_tensor_for_display(img_tensor):
