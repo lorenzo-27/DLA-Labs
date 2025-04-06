@@ -4,4 +4,5 @@
 /L1-CNNs/checkpoints/*
 /L1-CNNs/data/*
 /L1-CNNs/runs/*
+/L1-CNNs/cam_results/*
 *pyc

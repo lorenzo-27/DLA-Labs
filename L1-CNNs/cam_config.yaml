@@ -1,0 +1,23 @@
+model:
+  name: resnet_cam
+  input_shape: [3, 160, 160]  # [channels, height, width] for Imagenette (160x160)
+  num_classes: 10
+  residual: true
+
+training:
+  learning_rate: 0.001
+  batch_size: 64
+  num_epochs: 20
+  weight_decay: 0.0001
+  checkpoint_dir: checkpoints/
+  log_every: 10
+  save_every: 2
+  early_stopping_patience: 5
+  optimizer: adam  # [adam, sgd]
+  scheduler: reduce_lr  # [reduce_lr, cosine]
+
+dataset:
+  name: imagenette
+  data_dir: data/
+  img_size: 160  # Imagenette image resolution
+  val_size: 1000  # Validation set size
