@@ -1,8 +1,11 @@
 /.idea/*
 *.ipynb
 /tmp/*
-/L1-CNNs/checkpoints/*
-/L1-CNNs/data/*
-/L1-CNNs/runs/*
-/L1-CNNs/cam_results/*
+/DLA-Labs/L1_CNNs/checkpoints/*
+/DLA-Labs/L1_CNNs/data/*
+/DLA-Labs/L1_CNNs/runs/*
+/DLA-Labs/L1_CNNs/CAM/cam_results/*
+/DLA-Labs/L1_CNNs/CAM/checkpoints/*
+/DLA-Labs/L1_CNNs/CAM/data/*
+/DLA-Labs/L1_CNNs/CAM/runs/*
 *pyc
