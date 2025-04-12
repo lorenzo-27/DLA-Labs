@@ -17,7 +17,8 @@ def parse_args():
     parser.add_argument('--project', type=str, default='DRL-CartPole', help='WandB project name')
     parser.add_argument('--env', type=str, default='CartPole-v1', help='Gym environment to use')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
-    parser.add_argument('--device', type=str, default='cpu', help='Device to run on (cpu/cuda/mps)')
+    parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_available() else 'cpu',
+                        help='Device to run on (cpu/cuda/mps)')
 
     # Training parameters
     parser.add_argument('--episodes', type=int, default=1000, help='Number of training episodes')
