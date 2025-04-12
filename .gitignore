@@ -9,4 +9,5 @@
 /DLA_Labs/L1_CNNs/CAM/data/*
 /DLA_Labs/L1_CNNs/CAM/runs/*
 /DLA_Labs.egg-info/*
+/DLA_Labs/L2_DRL/wandb/*
 *pyc
