@@ -3,11 +3,10 @@ import gymnasium as gym
 import torch
 import wandb
 from rich.console import Console
-import os
 
-from DLA_Labs.L2_DRL.networks import PolicyNet, ValueNet
-from DLA_Labs.L2_DRL.trainer import REINFORCETrainer
-from DLA_Labs.L2_DRL.utils import evaluate_agent
+from DLA_Labs.L2_DRL.cartpole.networks import PolicyNet, ValueNet
+from DLA_Labs.L2_DRL.cartpole.trainer import REINFORCETrainer
+from DLA_Labs.L2_DRL.cartpole.utils import evaluate_agent
 
 
 def parse_args():

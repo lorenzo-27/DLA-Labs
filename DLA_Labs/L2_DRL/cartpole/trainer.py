@@ -1,7 +1,6 @@
 import torch
-import numpy as np
 from rich.console import Console
-from DLA_Labs.L2_DRL.utils import run_episode, compute_returns, evaluate_agent, save_checkpoint
+from DLA_Labs.L2_DRL.cartpole.utils import run_episode, compute_returns, evaluate_agent, save_checkpoint
 
 console = Console()
 
