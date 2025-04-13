@@ -11,4 +11,5 @@
 /DLA_Labs.egg-info/*
 /DLA_Labs/L2_DRL/cartpole/wandb/*
 /DLA_Labs/L2_DRL/car_racing/wandb/*
+/DLA_Labs/L1_CNNs/mlp_results/*
 *pyc
