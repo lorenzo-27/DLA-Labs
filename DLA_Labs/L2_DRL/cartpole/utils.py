@@ -92,6 +92,7 @@ def run_episode(env, policy, value_net=None, max_steps=500, render=False):
         # Execute action in environment
         obs, reward, terminated, truncated, _ = env.step(action)
         rewards.append(reward)
+        # terminated and truncated are mutually exclusive booleans
         done = terminated or truncated
 
         if done:

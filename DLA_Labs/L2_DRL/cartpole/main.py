@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument('--baseline', type=str, default='none',
                         choices=['none', 'std', 'value'],
                         help='Baseline to use (none/std/value)')
-    parser.add_argument('--gamma', type=float, default=0.99, help='Discount factor')
+    parser.add_argument('--gamma', type=float, default=0.99, help='Discount factor') # high value for long-term rewards
     parser.add_argument('--lr_policy', type=float, default=1e-3, help='Learning rate for policy network')
     parser.add_argument('--lr_value', type=float, default=1e-3, help='Learning rate for value network')
 

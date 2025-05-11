@@ -17,8 +17,9 @@ def parse_args():
     parser.add_argument('--num_frames', type=int, default=4, help='Number of frames to stack')
     parser.add_argument('--hidden_dim', type=int, default=256, help='Hidden dimension for networks')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
-    parser.add_argument('--device', type=str, default='cpu', help='Device to run on (cpu/cuda)')
-    parser.add_argument('--render', action='store_true', help='Render the environment')
+    parser.add_argument('--device', type=str, default='cuda' if torch.cuda.is_available() else 'cpu',
+                        help='Device to run on (cpu/cuda/mps)')
+    parser.add_argument('--render', action='store_true', help='Render the environment for visualization')
 
     return parser.parse_args()
 

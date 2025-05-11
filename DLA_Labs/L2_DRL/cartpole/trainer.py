@@ -91,6 +91,7 @@ class REINFORCETrainer:
 
             # Update running average
             episode_return = returns[0].item()
+            # Exponential moving average for running return (used to smooth the return and to reduce fluctuations)
             running_return = 0.05 * episode_return + 0.95 * running_return if episode > 1 else episode_return
 
             # Store episode statistics
@@ -120,6 +121,7 @@ class REINFORCETrainer:
 
             # Update policy
             self.optimizer.zero_grad()
+            # Policy loss is the negative log probability of the actions taken, weighted by the returns
             policy_loss = (-log_probs * base_returns).mean()
             policy_loss.backward()
             self.optimizer.step()

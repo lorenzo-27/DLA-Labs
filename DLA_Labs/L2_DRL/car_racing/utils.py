@@ -105,6 +105,9 @@ def select_action(observations, actor, device, deterministic=False):
     # Create categorical distribution
     dist = Categorical(logits=action_logits)
 
+    # Used to balance exploration and exploitation
+    # - determiniistic for evaluation (PPO)
+    # - stochastic for training
     if deterministic:
         action = torch.argmax(action_logits, dim=1)
     else:
