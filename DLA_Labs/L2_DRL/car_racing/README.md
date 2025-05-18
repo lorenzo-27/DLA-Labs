@@ -233,6 +233,8 @@ The implementation was evaluated on the CarRacing-v3 environment, which provides
 
 Our implementation achieved a high median score of **884 ± 28** over 100 consecutive runs, which would be a world record score for CarRacing-v3 (especially using the discrete space) according to the OpenAI Gym Leaderboard (https://github.com/openai/gym/wiki/Leaderboard). However, the leaderboard has been closed, so this result was not officially submitted.
 
+[Watch the demo](https://github.com/lorenzo-27/DLA-Labs/blob/master/assets/car_racing.mov)
+
 The performance was achieved with the following hyperparameters:
 - Frame stacking: 4 frames
 - Discount factor (gamma): 0.99
