@@ -237,7 +237,7 @@ DLA_Labs/L1_CNNs/CAM/
 
 ## References
 
-1. Bagdanov, A. D., DLA course material (2024)
+1. Bagdanov, A. D., DLA course material (2025)
 
 2. Zhou, B., Khosla, A., Lapedriza, A., Oliva, A., & Torralba, A. (2016). Learning Deep Features for Discriminative Localization. _IEEE Conference on Computer Vision and Pattern Recognition (CVPR)_. [arXiv:1512.04150](https://arxiv.org/abs/1512.04150)
 
