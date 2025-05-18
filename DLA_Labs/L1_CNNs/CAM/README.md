@@ -207,6 +207,10 @@ The visualization also displays:
 - The predicted class (or the specified target class)
 - For dataset visualizations, both the true class and predicted class
 
+<p align="center">
+<img  src="https://github.com/lorenzo-27/DLA-Labs/blob/master/assets/cam_results.png" width="90%" height="90%"/>
+</p>
+
 ### Understanding the Heatmap
 
 - **Red/Yellow regions**: Areas most important for the classification decision
