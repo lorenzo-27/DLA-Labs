@@ -35,13 +35,13 @@ def main():
 
     # Create environment
     render_mode = "human" if args.render else None
-    env = gym.make("CarRacing-v2", continuous=False, render_mode=render_mode)
+    env = gym.make("CarRacing-v3", continuous=False, render_mode=render_mode)
 
     # Get action dimension
     action_dim = env.action_space.n
     input_channels = args.num_frames
 
-    console.print(f"[bold blue]Testing PPO agent on CarRacing-v2[/bold blue]")
+    console.print(f"[bold blue]Testing PPO agent on CarRacing-v3[/bold blue]")
     console.print(f"[bold blue]Model path: {args.model_path}[/bold blue]")
     console.print(f"[bold blue]Number of episodes: {args.num_episodes}[/bold blue]")
 
