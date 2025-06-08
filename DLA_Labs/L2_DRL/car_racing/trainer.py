@@ -6,7 +6,6 @@ from rich.console import Console
 from collections import deque
 import random
 
-from DLA_Labs.L2_DRL.cartpole.utils import save_checkpoint
 from DLA_Labs.L2_DRL.car_racing.utils import FrameStack, preprocess_frame, select_action, evaluate_agent, save_ppo_checkpoint
 
 console = Console()
